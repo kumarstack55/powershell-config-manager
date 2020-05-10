@@ -31,11 +31,20 @@ Describe "Get-ConfigFullName" {
             Should Be "$Dir\.config\config-manager\config.json"
     }
 }
-# Describe "Get-UnixEpoch" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Get-UnixEpoch" {
+    It "returns zero when unix epoch is given" {
+        $EpochZeroStr = "1970/1/1 0:0:0 GMT"
+        $DateTime = Get-Date $EpochZeroStr
+        Get-UnixEpoch -DateTime $DateTime |
+            Should Be 0
+    }
+    It "returns positive number when datetime larger than epoch time is given" {
+        $EpochZeroStr = "1970/1/1 0:0:1 GMT"
+        $DateTime = Get-Date $EpochZeroStr
+        Get-UnixEpoch -DateTime $DateTime |
+            Should Be 1
+    }
+}
 # Describe "Get-BackupPostfix" {
 #     It "does something useful" {
 #         $true | Should Be $false
