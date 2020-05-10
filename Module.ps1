@@ -93,12 +93,18 @@ Function Export-Config {
 
         [Parameter()]
         [String]
-        $HomeDirectory = $HOME
+        $HomeDirectory = $HOME,
+
+        [Parameter()]
+        $DateTime = $null
     )
+    $DateTime = Get-NowIfDatetimeNull -DateTime $DateTime
+
     $ConfigFullName = Get-ConfigFullName -HomeDirectory $HomeDirectory
     if ($PSCmdlet.ShouldProcess('Config', 'エクスポートする')) {
         if (Test-Path -PathType Leaf $ConfigFullName) {
-            $ConfigBackupPath = Get-ConfigBackupPath
+            $ConfigBackupPath = Get-ConfigBackupPath `
+                -HomeDirectory $HomeDirectory -DateTime $DateTime
             Copy-Item -Force $ConfigFullName $ConfigBackupPath
         }
         $Config |

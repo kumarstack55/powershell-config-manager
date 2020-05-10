@@ -113,21 +113,55 @@ Describe "Import-Config" {
         $Config["k"] | Should Be "v"
     }
 }
-# Describe "Export-Config" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
-# Describe "Get-Base64EncodedString" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
-# Describe "Get-Base64DecodedString" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Export-Config" {
+    It "copies old config.json to backup file" {
+        $HomeDirectory = Join-Path $TestDrive "export-config1"
+
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        '{"k1":"v1"}' |
+            Out-File $HomeDirectory\.config\config-manager\config.json
+
+        $Config = @{"k1"="v2"}
+
+        $EpochZeroStr = "1970/1/1 0:0:0 GMT"
+        $DateTime = Get-Date $EpochZeroStr
+
+        Export-Config -Config $Config -HomeDirectory $HomeDirectory -DateTime $DateTime
+
+        $BackupPath = Get-ConfigBackupPath `
+            -HomeDirectory $HomeDirectory -DateTime $DateTime
+
+        $o = Get-Content $BackupPath |
+            ConvertFrom-JSON
+        $ConfigOld = Get-HashtableFromPSCustomObject $o
+        $ConfigOld["k1"] | Should Be "v1"
+    }
+    It "writes config.json" {
+        $HomeDirectory = Join-Path $TestDrive "export-config2"
+
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        '{"k1":"v1"}' |
+            Out-File $HomeDirectory\.config\config-manager\config.json
+
+        $Config = @{"k1"="v2"}
+
+        Export-Config -Config $Config -HomeDirectory $HomeDirectory
+
+        $Config2 = Import-Config $HomeDirectory
+
+        $Config2["k1"] | Should Be "v2"
+    }
+}
+Describe "Get-Base64EncodedString" {
+    It "returns base64 encoded string" {
+        Get-Base64EncodedString "a" | Should Be "YQ=="
+    }
+}
+Describe "Get-Base64DecodedString" {
+    It "does something useful" {
+        Get-Base64DecodedString "YQ==" | Should Be "a"
+    }
+}
 # Describe "Get-SecretKeyName" {
 #     It "does something useful" {
 #         $true | Should Be $false
