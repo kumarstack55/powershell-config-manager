@@ -78,8 +78,8 @@ Function New-Config {
 }
 
 Function Import-Config {
-    Param()
-    $ConfigFullName = Get-ConfigFullName
+    Param([Parameter()][String]$HomeDirectory = $HOME)
+    $ConfigFullName = Get-ConfigFullName -HomeDirectory $HomeDirectory
     $ConfigPso = Get-Content $ConfigFullName |
         ConvertFrom-JSON
     $Hashable = Get-HashtableFromPSCustomObject -PSCustomObject $ConfigPso
@@ -87,8 +87,15 @@ Function Import-Config {
 }
 
 Function Export-Config {
-    Param([Parameter(Mandatory)]$Config)
-    $ConfigFullName = Get-ConfigFullName
+    Param(
+        [Parameter(Mandatory)]
+        $Config,
+
+        [Parameter()]
+        [String]
+        $HomeDirectory = $HOME
+    )
+    $ConfigFullName = Get-ConfigFullName -HomeDirectory $HomeDirectory
     if ($PSCmdlet.ShouldProcess('Config', 'エクスポートする')) {
         if (Test-Path -PathType Leaf $ConfigFullName) {
             $ConfigBackupPath = Get-ConfigBackupPath

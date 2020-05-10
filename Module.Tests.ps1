@@ -95,11 +95,24 @@ Describe "New-Config" {
         }
     }
 }
-# Describe "Import-Config" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Import-Config" {
+    It "returns hashtable" {
+        $HomeDirectory = Join-Path $TestDrive "import-config1"
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        '{"k":"v"}' |
+            Out-File $HomeDirectory\.config\config-manager\config.json
+        $Config = Import-Config -HomeDirectory $HomeDirectory
+        $Config.GetType().Name | Should Be "Hashtable"
+    }
+    It "returns key value pairs" {
+        $HomeDirectory = Join-Path $TestDrive "import-config2"
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        '{"k":"v"}' |
+            Out-File $HomeDirectory\.config\config-manager\config.json
+        $Config = Import-Config -HomeDirectory $HomeDirectory
+        $Config["k"] | Should Be "v"
+    }
+}
 # Describe "Export-Config" {
 #     It "does something useful" {
 #         $true | Should Be $false
