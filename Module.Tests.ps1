@@ -162,13 +162,16 @@ Describe "Get-Base64DecodedString" {
         Get-Base64DecodedString "YQ==" | Should Be "a"
     }
 }
-# Describe "Get-SecretKeyName" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
-# Describe "Get-KeyName" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Get-SecretKeyName" {
+    It "returns secret key name" {
+        Get-SecretKeyName "key" | Should Be "key_base64"
+    }
+}
+Describe "Get-KeyName" {
+    It "returns key name when secret key name is given" {
+        Get-KeyName "key_base64" | Should Be "key"
+    }
+    It "returns key name when normal key name is given" {
+        Get-KeyName "key" | Should Be "key"
+    }
+}
