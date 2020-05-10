@@ -1,4 +1,4 @@
-﻿Function Get-HashableFromPSCustomObject {
+﻿Function Get-HashtableFromPSCustomObject {
     Param([Parameter(Mandatory)]$PSCustomObject)
     $Hashable = @{}
     $PSCustomObject.psobject.properties |
@@ -68,7 +68,7 @@ Function Import-Config {
     $ConfigFullName = Get-ConfigFullName
     $ConfigPso = Get-Content $ConfigFullName |
         ConvertFrom-JSON
-    $Hashable = Get-HashableFromPSCustomObject -PSCustomObject $ConfigPso
+    $Hashable = Get-HashtableFromPSCustomObject -PSCustomObject $ConfigPso
     return $Hashable
 }
 
