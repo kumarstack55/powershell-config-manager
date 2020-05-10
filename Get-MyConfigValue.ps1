@@ -15,29 +15,8 @@ $ErrorActionPreference = "Stop"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\Module.ps1"
 
-$Config = Import-Config
-
-$Secret = $false
-$NameSecret = Get-SecretKeyName -Name $Name
-if (-not $Config.ContainsKey($Name)) {
-    if (-not $Config.ContainsKey($NameSecret)) {
-        throw "Name $Name does not exist"
-    } else  {
-        $Secret = $true
-    }
-}
-
-if ($Secret) {
-    $Value = $Config[$NameSecret]
-} else {
-    $Value = $Config[$Name]
-}
-
 if ($Clipboard) {
-    if ($Secret) {
-        $Value2 = Get-Base64DecodedString($Value)
-    }
-    Set-Clipboard $Value2
+    Get-MyConfigValue -Name $Name -Clipboard
 } else {
-    $Value
+    Get-MyConfigValue -Name $Name
 }
