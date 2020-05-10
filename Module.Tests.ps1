@@ -174,6 +174,8 @@ Describe "Export-Config" {
 
         $Config2["あ"] | Should Be "う"
     }
+#    It "writes ordered keys" {
+#    }
 }
 Describe "Get-Base64EncodedString" {
     It "returns base64 encoded string" {

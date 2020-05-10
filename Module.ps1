@@ -108,7 +108,6 @@ Function Export-Config {
             Copy-Item -Force $ConfigFullName $ConfigBackupPath
         }
         $Config |
-            Sort-Object -Property Key |
             ConvertTo-JSON -Depth 100 |
             Out-File $ConfigFullName
     }
