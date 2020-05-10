@@ -53,11 +53,15 @@ Describe "Get-BackupPostfix" {
             Should Be "-1970-01-01.0"
     }
 }
-# Describe "Get-ConfigBackupPath" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Get-ConfigBackupPath" {
+    It "returns config backup path" {
+        $EpochZeroStr = "1970/1/1 0:0:0 GMT"
+        $DateTime = Get-Date $EpochZeroStr
+        $HomeDirectory = Join-Path $TestDrive "home"
+        Get-ConfigBackupPath -HomeDirectory $HomeDirectory -DateTime $DateTime |
+            Should Be "$TestDrive\home\.config\config-manager\config-1970-01-01.0.json"
+    }
+}
 # Describe "New-Config" {
 #     It "does something useful" {
 #         $true | Should Be $false

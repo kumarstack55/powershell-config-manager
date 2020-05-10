@@ -19,11 +19,17 @@ Function Get-ConfigFullName {
     return Join-Path $Directory "config.json"
 }
 
-Function Get-UnixEpoch {
+Function Get-NowIfDatetimeNull {
     Param($DateTime = $null)
     if ($DateTime -eq $null) {
         $DateTime = Get-Date
     }
+    return $DateTime
+}
+
+Function Get-UnixEpoch {
+    Param($DateTime = $null)
+    $DateTime = Get-NowIfDatetimeNull -DateTime $DateTime
     $EpochZeroStr = "1970/1/1 0:0:0 GMT"
     $TimeSpan = ((Get-Date($DateTime)) - (Get-Date($EpochZeroStr)))
     return [int]$TimeSpan.TotalSeconds
@@ -31,27 +37,35 @@ Function Get-UnixEpoch {
 
 Function Get-BackupPostfix {
     Param($DateTime = $null)
-    if ($DateTime -eq $null) {
-        $DateTime = Get-Date
-    }
+    $DateTime = Get-NowIfDatetimeNull -DateTime $DateTime
     $Ymd = Get-Date $DateTime -Format "yyyy-MM-dd"
     $UnixEpoch = Get-UnixEpoch $DateTime
     return "-${Ymd}.${UnixEpoch}"
 }
 
 Function Get-ConfigBackupPath {
-    Param()
-    $Path = Get-ConfigFullName
-    $Item = Get-Item $Path
-    $BaseName = $Item.BaseName + (Get-BackupPostfix)
-    $Name = $BaseName + $Item.Extension
-    return Join-Path $Item.Directory.FullName $Name
+    Param(
+        [Parameter()]
+        [String]
+        $HomeDirectory = $HOME,
+
+        [Parameter()]
+        $DateTime = $null
+    )
+    $DateTime = Get-NowIfDatetimeNull -DateTime $DateTime
+    $Path = Get-ConfigFullName -HomeDirectory $HomeDirectory
+    $Directory = Split-Path -Parent $Path
+    $BaseName = [io.path]::GetFileNameWithoutExtension($Path) + `
+        (Get-BackupPostfix -DateTime $DateTime)
+    $Extension = [io.path]::GetExtension($Path)
+    $Name = $BaseName + $Extension
+    return Join-Path $Directory $Name
 }
 
 Function New-Config {
-    Param()
+    Param([Parameter()][String]$HomeDirectory = $HOME)
 
-    $Directory = Get-ConfigDirectory
+    $Directory = Get-ConfigDirectory -HomeDirectory $HomeDirectory
     New-Item -ItemType Container $Directory
 
     $ConfigFullName = Get-ConfigFullName
