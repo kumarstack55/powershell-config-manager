@@ -152,3 +152,22 @@ Function Get-KeyName {
     }
     return $Name
 }
+
+Function Get-MyConfig {
+    Param()
+
+    $Config = Import-Config
+
+    $Config2 = @{}
+    $Config.GetEnumerator() |
+        ForEach-Object {
+            $Key = Get-KeyName($_.Key)
+            $Value = $_.Value
+            if ($Key -ne $_.Key) {
+                $Value = "*"
+            }
+            $Config2[$Key] = $Value
+        }
+
+    $Config2
+}
