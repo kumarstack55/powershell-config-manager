@@ -62,11 +62,39 @@ Describe "Get-ConfigBackupPath" {
             Should Be "$TestDrive\home\.config\config-manager\config-1970-01-01.0.json"
     }
 }
-# Describe "New-Config" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "New-Config" {
+    It "creates directory if directory .config not exists" {
+        $HomeDirectory = Join-Path $TestDrive "new-config1"
+        New-Config -HomeDirectory $HomeDirectory
+        Test-Path "$HomeDirectory\.config\config-manager\config.json" |
+            Should Be $True
+    }
+    It "doesn't exit if directory exists" {
+        $HomeDirectory = Join-Path $TestDrive "new-config2"
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        New-Config -HomeDirectory $HomeDirectory
+        Test-Path "$HomeDirectory\.config\config-manager\config.json" |
+            Should Be $True
+    }
+    It "creates config.json that contains empty object" {
+        $HomeDirectory = Join-Path $TestDrive "new-config3"
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        New-Config -HomeDirectory $HomeDirectory
+        Get-Content "$HomeDirectory\.config\config-manager\config.json" |
+            Should Be "{}"
+    }
+    It "doesn't overwrite" {
+        $HomeDirectory = Join-Path $TestDrive "new-config4"
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        New-Item $HomeDirectory\.config\config-manager\config.json
+        try {
+            New-Config -HomeDirectory $HomeDirectory
+            $false | Should Be $true
+        } catch {
+            $true | Should Be $true
+        }
+    }
+}
 # Describe "Import-Config" {
 #     It "does something useful" {
 #         $true | Should Be $false

@@ -66,9 +66,9 @@ Function New-Config {
     Param([Parameter()][String]$HomeDirectory = $HOME)
 
     $Directory = Get-ConfigDirectory -HomeDirectory $HomeDirectory
-    New-Item -ItemType Container $Directory
+    New-Item -Force -ItemType Container $Directory
 
-    $ConfigFullName = Get-ConfigFullName
+    $ConfigFullName = Get-ConfigFullName -HomeDirectory $HomeDirectory
     if ($PSCmdlet.ShouldProcess('Config', 'エクスポートする')) {
         if (Test-Path -PathType Leaf $ConfigFullName) {
             throw "すでにファイル $ConfigFullName が存在する"
