@@ -17,11 +17,13 @@ Describe "Get-HashtableFromPSCustomObject" {
         $h['key2'] | Should Be 'value2'
     }
 }
-# Describe "Get-ConfigDirectory" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Get-ConfigDirectory" {
+    It "returns config directory" {
+        $Dir = Join-Path $TestDrive "Container"
+        Get-ConfigDirectory -HomeDirectory $Dir |
+            Should Be "$Dir\.config\config-manager"
+    }
+}
 # Describe "Get-ConfigFullName" {
 #     It "does something useful" {
 #         $true | Should Be $false

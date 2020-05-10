@@ -7,8 +7,11 @@
 }
 
 Function Get-ConfigDirectory {
-    Param()
-    $Dir1 = Join-Path $HOME ".config"
+    Param([Parameter()][String]$HomeDirectory)
+    if ($HomeDirectory -eq $null) {
+        $HomeDirectory = $HOME
+    }
+    $Dir1 = Join-Path $HomeDirectory ".config"
     $Dir2 = Join-Path $Dir1 "config-manager"
     return $Dir2
 }
