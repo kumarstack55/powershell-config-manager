@@ -20,19 +20,8 @@ $ErrorActionPreference = "Stop"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\Module.ps1"
 
-$Config = Import-Config
-
-if ($Secret -and $Config.ContainsKey($Name)) {
-    throw "Not secret name $Name exists"
-}
-
-$Name2 = $Name
-$Value2 = $Value
 if ($Secret) {
-    $Name2 = Get-SecretKeyName -Name $Name
-    $Value2 = Get-Base64EncodedString -DecodedString $Value
+    Update-MyConfig -Name $Name -Value $Value -Secret
+} else {
+    Update-MyConfig -Name $Name -Value $Value
 }
-
-$Config[$Name2] = $Value2
-
-Export-Config -Config $Config
