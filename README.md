@@ -19,7 +19,7 @@ git clone https://github.com/kumarstack55/powershell-config-manager
 cd $HOME/powershell-config-manager
 
 # Initialize
-.\Init.ps1
+.\Init-MyConfig.ps1
 
 # List key-value pairs
 .\Get-MyConfig.ps1
