@@ -112,6 +112,14 @@ Describe "Import-Config" {
         $Config = Import-Config -HomeDirectory $HomeDirectory
         $Config["k"] | Should Be "v"
     }
+    It "returns key value pairs when key value contains non-ascii" {
+        $HomeDirectory = Join-Path $TestDrive "import-config3"
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        '{"あ":"い"}' |
+            Out-File $HomeDirectory\.config\config-manager\config.json
+        $Config = Import-Config -HomeDirectory $HomeDirectory
+        $Config["あ"] | Should Be "い"
+    }
 }
 Describe "Export-Config" {
     It "copies old config.json to backup file" {
@@ -150,6 +158,21 @@ Describe "Export-Config" {
         $Config2 = Import-Config $HomeDirectory
 
         $Config2["k1"] | Should Be "v2"
+    }
+    It "writes config.json when key value contains non-ascii" {
+        $HomeDirectory = Join-Path $TestDrive "export-config3"
+
+        New-Item -ItemType Container $HomeDirectory\.config\config-manager
+        '{"あ":"い"}' |
+            Out-File $HomeDirectory\.config\config-manager\config.json
+
+        $Config = @{"あ"="う"}
+
+        Export-Config -Config $Config -HomeDirectory $HomeDirectory
+
+        $Config2 = Import-Config $HomeDirectory
+
+        $Config2["あ"] | Should Be "う"
     }
 }
 Describe "Get-Base64EncodedString" {
