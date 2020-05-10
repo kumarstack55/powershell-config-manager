@@ -3,7 +3,9 @@
 ## Introduction
 
 It is a simple tool to manage configuration information such as development environment.
+
 The passwords are encoded so that it cannot be instantly recognized even if it is displayed on the display.
+
 This tool is not suitable for the purpose of managing important confidential information.
 
 ## Installation
