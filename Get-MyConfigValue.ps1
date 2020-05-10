@@ -21,7 +21,7 @@ $Secret = $false
 $NameSecret = Get-SecretKeyName -Name $Name
 if (-not $Config.ContainsKey($Name)) {
     if (-not $Config.ContainsKey($NameSecret)) {
-        throw "名前 $Name が存在しない"
+        throw "Name $Name does not exist"
     } else  {
         $Secret = $true
     }

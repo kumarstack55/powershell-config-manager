@@ -23,7 +23,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Config = Import-Config
 
 if ($Secret -and $Config.ContainsKey($Name)) {
-    throw "秘密でない名前 $Name が既に存在する"
+    throw "Not secret name $Name exists"
 }
 
 $Name2 = $Name
