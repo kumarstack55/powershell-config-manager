@@ -40,9 +40,9 @@ Function Get-BackupPostfix {
     if ($DateTime -eq $null) {
         $DateTime = Get-Date
     }
-    $Ymd = Get-Date $DateTime -Format "yyyy-mm-dd"
+    $Ymd = Get-Date $DateTime -Format "yyyy-MM-dd"
     $UnixEpoch = Get-UnixEpoch $DateTime
-    return "-${Ymd}-${UnixEpoch}"
+    return "-${Ymd}.${UnixEpoch}"
 }
 
 Function Get-ConfigBackupPath {

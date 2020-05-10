@@ -39,17 +39,20 @@ Describe "Get-UnixEpoch" {
             Should Be 0
     }
     It "returns positive number when time larger than unix epoch is given" {
-        $EpochZeroStr = "1970/1/1 0:0:1 GMT"
-        $DateTime = Get-Date $EpochZeroStr
+        $Str = "1970/1/1 0:0:1 GMT"
+        $DateTime = Get-Date $Str
         Get-UnixEpoch -DateTime $DateTime |
             Should Be 1
     }
 }
-# Describe "Get-BackupPostfix" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Get-BackupPostfix" {
+    It "returns backup postfix" {
+        $EpochZeroStr = "1970/1/1 0:0:0 GMT"
+        $DateTime = Get-Date $EpochZeroStr
+        Get-BackupPostfix -DateTime $DateTime |
+            Should Be "-1970-01-01.0"
+    }
+}
 # Describe "Get-ConfigBackupPath" {
 #     It "does something useful" {
 #         $true | Should Be $false
