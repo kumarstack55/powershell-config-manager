@@ -36,3 +36,7 @@ cd $HOME/powershell-config-manager
 .\Update-MyConfig.ps1 -Name env1_username -Value testuser1
 .\Update-MyConfig.ps1 -Name env1_password -Value s3cret! -Secret
 ```
+
+## License
+
+MIT
