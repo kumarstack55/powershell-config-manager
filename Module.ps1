@@ -17,8 +17,11 @@ Function Get-ConfigDirectory {
 }
 
 Function Get-ConfigFullName {
-    Param()
-    $Directory = Get-ConfigDirectory
+    Param([Parameter()][String]$HomeDirectory)
+    if ($HomeDirectory -eq $null) {
+        $HomeDirectory = $HOME
+    }
+    $Directory = Get-ConfigDirectory -HomeDirectory $HomeDirectory
     return Join-Path $Directory "config.json"
 }
 

@@ -24,11 +24,13 @@ Describe "Get-ConfigDirectory" {
             Should Be "$Dir\.config\config-manager"
     }
 }
-# Describe "Get-ConfigFullName" {
-#     It "does something useful" {
-#         $true | Should Be $false
-#     }
-# }
+Describe "Get-ConfigFullName" {
+    It "returns config full name" {
+        $Dir = Join-Path $TestDrive "Container"
+        Get-ConfigFullName -HomeDirectory $Dir |
+            Should Be "$Dir\.config\config-manager\config.json"
+    }
+}
 # Describe "Get-UnixEpoch" {
 #     It "does something useful" {
 #         $true | Should Be $false
