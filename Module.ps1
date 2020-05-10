@@ -7,20 +7,14 @@
 }
 
 Function Get-ConfigDirectory {
-    Param([Parameter()][String]$HomeDirectory)
-    if ($HomeDirectory -eq $null) {
-        $HomeDirectory = $HOME
-    }
+    Param([Parameter()][String]$HomeDirectory = $HOME)
     $Dir1 = Join-Path $HomeDirectory ".config"
     $Dir2 = Join-Path $Dir1 "config-manager"
     return $Dir2
 }
 
 Function Get-ConfigFullName {
-    Param([Parameter()][String]$HomeDirectory)
-    if ($HomeDirectory -eq $null) {
-        $HomeDirectory = $HOME
-    }
+    Param([Parameter()][String]$HomeDirectory = $HOME)
     $Directory = Get-ConfigDirectory -HomeDirectory $HomeDirectory
     return Join-Path $Directory "config.json"
 }
