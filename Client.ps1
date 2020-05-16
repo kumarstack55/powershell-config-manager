@@ -1,4 +1,7 @@
-﻿Function Get-MyConfig {
+﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+. "$here\Module.ps1"
+
+Function Get-MyConfig {
     Param()
 
     $Config = Import-Config
