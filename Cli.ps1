@@ -21,7 +21,8 @@ Function Get-MyConfig {
             $Config2[$Key] = $Value
         }
 
-    $Config2
+    $Config2.GetEnumerator() |
+        Sort-Object -Property Name
 }
 
 Function Get-MyConfigValue {
